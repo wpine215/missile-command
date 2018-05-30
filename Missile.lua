@@ -1,10 +1,18 @@
 Missile = Class {}
 
 function Missile:init(x)
-	self.target = math.random(1, 3)
+	self.target = math.random(1, 6)
 	self.x1 = x
 	self.x2 = x
-	self.fx = math.random(cities[self.target].l_edge, cities[self.target].r_edge)
+	if self.target < 4 then
+		self.fx = math.random(cities[self.target].l_edge, 
+							  cities[self.target].r_edge)
+	elseif self.target < 6 then
+		self.fx = math.random(silos[self.target - 3].l_edge,
+							  silos[self.target - 3].r_edge)
+	else
+		self.fx = math.random(25, WINDOW_WIDTH - 25)
+	end
 
 	self.y1 = 0
 	self.y2 = 0
@@ -23,7 +31,7 @@ function Missile:init(x)
 	self.expmaxrad = 45
 	self.expdr_grow = 60
 	self.expdr_shrink = 90
-	self.explen = 60
+	self.explen = 360
 
 	self.growing = true
 	self.impacted = false
@@ -62,11 +70,10 @@ function Missile:render()
 		love.graphics.line(self.x1, self.y1, self.x2, self.y2)
 		love.graphics.setColor(1,1,1,1)
 		love.graphics.setLineWidth(3)
-		love.graphics.line(self.x2 - self.dx / 24, self.y2 - self.dy / 24, self.x2, self.y2)
+		love.graphics.line(self.x2 - ((1 / self.slope) * self.speed) / 4, self.y2 - self.speed / 4, self.x2, self.y2)
 	end
 	love.graphics.setColor(1,1,1,1)
 	if self.exprad > 0 then
-	    -- love.graphics.circle('fill', self.x2, self.y2, self.exprad)
 	    love.graphics.arc('fill', self.x2, self.y2, self.exprad, math.pi, 2 * math.pi)
 	end
 end

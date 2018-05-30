@@ -1,6 +1,7 @@
 Class = require 'class'
 require 'Missile'
 require 'City'
+require 'Silo'
 
 
 WINDOW_WIDTH = 1280
@@ -15,21 +16,29 @@ function love.load()
 	love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
 		fullscreen = false,
 		resizable = false,
-		vsync = true
+		vsync = false
 	})
+
+	--love.mouse.setVisible(false)
+  	--love.mouse.setGrabbed(true)
+  	--cursor = love.graphics.newImage("crosshair.png")
 
 	font = love.graphics.newFont(48)
 
 	math.randomseed(os.time())
 	
 	cities = {}
-	cities[1] = City(WINDOW_WIDTH / 5, FLOOR_HEIGHT, 30, 45)
-	cities[2] = City(WINDOW_WIDTH / 2, FLOOR_HEIGHT, 30, 45)
-	cities[3] = City(4 * WINDOW_WIDTH / 5, FLOOR_HEIGHT, 30, 45)
+	cities[1] = City(1 * WINDOW_WIDTH / 6, FLOOR_HEIGHT, 45, 45)
+	cities[2] = City(3 * WINDOW_WIDTH / 6, FLOOR_HEIGHT, 45, 45)
+	cities[3] = City(5 * WINDOW_WIDTH / 6, FLOOR_HEIGHT, 45, 45)
+
+	silos = {}
+	silos[1] = Silo(2 * WINDOW_WIDTH / 6, FLOOR_HEIGHT)
+	silos[2] = Silo(4 * WINDOW_WIDTH / 6, FLOOR_HEIGHT)
 
 	missiles = {}
 	for i=1,8 do
-		missiles[i] = Missile(love.math.random(25, WINDOW_WIDTH - 25))
+		missiles[i] = Missile(love.math.random(0, WINDOW_WIDTH))
 	end
 end
 
@@ -46,15 +55,19 @@ function love.keypressed(key)
 end
 
 function love.draw()
+	cities[1]:render()
+	cities[2]:render()
+	cities[3]:render()
+	silos[1]:render()
+	silos[2]:render()
+
 	love.graphics.setLineWidth(2)
 	love.graphics.setColor(1, 1, 1, 1)
 	love.graphics.line(0, FLOOR_HEIGHT, WINDOW_WIDTH, FLOOR_HEIGHT)
 
-	cities[1]:render()
-	cities[2]:render()
-	cities[3]:render()
-
 	for _, missile in ipairs(missiles) do
 		missile:render(dt)
 	end
+
+	--love.graphics.draw(cursor, love.mouse.getX() - cursor:getWidth() / 2, love.mouse.getY() - cursor:getHeight() / 2)
 end
