@@ -28,8 +28,8 @@ function love.load()
 	cities[3] = City(4 * WINDOW_WIDTH / 5, FLOOR_HEIGHT, 30, 45)
 
 	missiles = {}
-	for i=1,5 do
-		missiles[i] = Missile(math.random(25, WINDOW_WIDTH - 25))
+	for i=1,8 do
+		missiles[i] = Missile(love.math.random(25, WINDOW_WIDTH - 25))
 	end
 end
 
