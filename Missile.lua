@@ -26,6 +26,12 @@ function Missile:init(x)
 	self.dy = self.fy - self.y1
 	self.speed = 75
 	self.slope = self.dy / self.dx
+	
+	if self.slope > 0 then
+	    self.angle = math.atan(self.slope) - math.pi
+	else
+		self.angle = math.atan(self.slope)
+	end
 
 	self.exprad = 0
 	self.expmaxrad = 45
@@ -69,8 +75,14 @@ function Missile:render()
 	    love.graphics.setLineWidth(1)
 		love.graphics.line(self.x1, self.y1, self.x2, self.y2)
 		love.graphics.setColor(1,1,1,1)
-		love.graphics.setLineWidth(3)
-		love.graphics.line(self.x2 - ((1 / self.slope) * self.speed) / 4, self.y2 - self.speed / 4, self.x2, self.y2)
+		love.graphics.setLineWidth(5)
+
+		love.graphics.push()
+		love.graphics.translate(self.x2, self.y2)
+		love.graphics.rotate(self.angle)
+		love.graphics.line(0, 0, 20, 0)
+		love.graphics.pop()
+		-- love.graphics.line(self.x2 - ((1 / self.slope) * self.speed) / 4, self.y2 - self.speed / 4, self.x2, self.y2)
 	end
 	love.graphics.setColor(1,1,1,1)
 	if self.exprad > 0 then
